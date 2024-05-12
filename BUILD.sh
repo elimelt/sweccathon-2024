@@ -15,10 +15,10 @@ pyinstaller --onefile toc.py
 deactivate
 
 # Move executable to root
-mv dist/toc .
+mv ./dist/toc .
 
 # Remove generated files
-rm -rf build/ dist/ toc.spec
+rm -rf ./build/ ./dist/ ./toc.spec
 
 mkdir build
 mv ./toc ./build/

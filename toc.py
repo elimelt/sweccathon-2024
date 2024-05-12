@@ -5,6 +5,32 @@ from mistletoe.ast_renderer import ASTRenderer
 from types import SimpleNamespace
 import json
 
+colors = {
+    'red': '\033[91m',
+    'green': '\033[92m',
+    'yellow': '\033[93m',
+    'blue': '\033[94m',
+    'purple': '\033[95m',
+    'end': '\033[0m'
+}
+
+FILENAME = "blue"
+TABLE_OF_CONTENTS = "purple"
+WELCOME = "red"
+
+def welcome():
+	msg = r"""
+  ______      __    __              ____   ______            __             __
+ /_  __/___ _/ /_  / /__     ____  / __/  / ____/___  ____  / /____  ____  / /______
+  / / / __ `/ __ \/ / _ \   / __ \/ /_   / /   / __ \/ __ \/ __/ _ \/ __ \/ __/ ___/
+ / / / /_/ / /_/ / /  __/  / /_/ / __/  / /___/ /_/ / / / / /_/  __/ / / / /_(__  )
+/_/  \__,_/_.___/_/\___/   \____/_/     \____/\____/_/ /_/\__/\___/_/ /_/\__/____/
+	"""
+
+	print_c(msg, WELCOME)
+
+def print_c(text, color):
+    print(f"{colors[color]}{text}{colors['end']}")
 
 def parse(text):
     # Parse into AST JSON
@@ -18,7 +44,7 @@ def parse(text):
 def table_of_contents(ast):
     for child in ast.children:
         if child.type == "Heading" and len(child.children) == 1:
-            print("\t" * (child.level) + f"- {child.children[0].content}")
+            print_c("\t" * (child.level) + f"- {child.children[0].content}", TABLE_OF_CONTENTS)
 
 
 def get_md_paths_recursive(base_path) -> list[Path]:
@@ -63,10 +89,11 @@ def main():
         with open(md_path, "r", encoding="utf-8") as file:
             md_content = file.read()
             ast = parse(md_content)
-            print(f"- {md_path}")
+            print_c(f"- {md_path}", FILENAME)
             table_of_contents(ast)
             print()
 
 
 if __name__ == "__main__":
+    welcome()
     main()
