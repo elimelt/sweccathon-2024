@@ -119,6 +119,7 @@ if __name__ == "__main__":
 		"-d",
 		"--depth",
 		type=int,
+		default=1,
 		help="Minimum heading level to include in the table of contents"
 	)
 	parser.add_argument(
@@ -128,6 +129,9 @@ if __name__ == "__main__":
 	)
 
 	args = parser.parse_args()
+
+	if not args.recursive and any(Path(path).is_dir() for path in args.paths):
+		parser.error("Directories must be specified with the -r option")
 
 	if args.format == "console":
 		welcome()
